@@ -4,16 +4,19 @@ import atexit
 
 point_register = {'suite': {}, 'test': {}}
 
+
 def qualifier(test):
     return "%s.%s" % (test.__module__, test.__qualname__)
+
 
 def save_points(o, points, dst):
     q = qualifier(o)
     if q not in dst:
-        dst[q] = [] 
+        dst[q] = []
     for point in points:
         if point not in dst[q]:
             dst[q].append(point)
+
 
 def points(*points):
 
@@ -21,7 +24,7 @@ def points(*points):
         if isclass(o):
             save_points(o, points, point_register['suite'])
         elif isfunction(o):
-#            pdb.set_trace()
+            # pdb.set_trace()
             save_points(o, points, point_register['test'])
         else:
             raise Exception("Expected decorator object '%s' type to be Class or Function but was %s." % (o, type(o)))
@@ -33,6 +36,7 @@ def points(*points):
         if type(point) is not str:
             raise Exception("Points decorator argument '%s' needs to be a string, but was %s." % (point, type(point).__name__))
     return points_wrapper
+
 
 @atexit.register
 def write_points():
