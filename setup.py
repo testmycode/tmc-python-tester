@@ -13,8 +13,12 @@ setup(
         'pyunit', 'unittest', 'junit xml', 'report', 'testrunner', 'xmlrunner'
     ],
     url='http://github.com/rage/tmc-python3-utils/tree/master/',
-    packages=['xmlrunner'],
     zip_safe=False,
     include_package_data=True,
-    test_suite='tests'
+    test_suite='tests',
+    entry_points={
+        'console_scripts': [
+            'tmc-python3-utils=tmc_python3_utils:main'
+        ]
+    }
 )

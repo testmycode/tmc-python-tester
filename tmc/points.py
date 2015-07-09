@@ -1,8 +1,7 @@
-from inspect import isclass, isfunction, getmembers
-import pdb
-import atexit
+from inspect import isclass, isfunction
+from collections import defaultdict
 
-point_register = {'suite': {}, 'test': {}}
+point_register = {'suite': defaultdict(list), 'test': defaultdict(list)}
 
 
 def qualifier(test):
@@ -11,8 +10,6 @@ def qualifier(test):
 
 def save_points(o, points, dst):
     q = qualifier(o)
-    if q not in dst:
-        dst[q] = []
     for point in points:
         if point not in dst[q]:
             dst[q].append(point)
@@ -38,10 +35,5 @@ def points(*points):
     return points_wrapper
 
 
-@atexit.register
-def write_points():
-    f = open("tmc_available_points.txt", "w")
-    for register in point_register:
-        for qualifier, points in point_register[register].items():
-            f.write("[%s] [%s] %s\n" % (register, qualifier, " ".join(points)))
-    f.close()
+def getPoints():
+    return point_register
