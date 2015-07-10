@@ -59,6 +59,7 @@ class TMCResult(TextTestResult):
         points += suitePoints
         return points
 
+    # TODO: Do not do this if not using TMCTestRunner
     @atexit.register
     def write_output():
         with open('tmc_test_results.json', 'w') as f:
