@@ -15,7 +15,7 @@ setup(
     url='http://github.com/rage/tmc-python3-utils/tree/master/',
     zip_safe=False,
     include_package_data=True,
-    test_suite='tests',
+    test_suite='test',
     entry_points={
         'console_scripts': [
             'tmc-python3-utils=tmc_python3_utils:main'

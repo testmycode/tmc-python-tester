@@ -55,3 +55,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# TMC files
+tmc_test_results.json
