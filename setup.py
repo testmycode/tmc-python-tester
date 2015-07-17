@@ -4,7 +4,7 @@ from distutils.util import convert_path
 setup(
     name='tmc-python3-utils',
     version='0.0.1',
-    author='Joni Salmi',
+    author='Joni Salmi <josalmi@cs.helsinki.fi>, Henrik Nygren <nygrenh@gmail.com>, Ilari Sinkkonen <ilari.sinkkonen@cs.helsinki.fi>',
     author_email='josalmi@cs.helsinki.fi',
     description='',
     license='BSD',
