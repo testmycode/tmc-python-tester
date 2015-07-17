@@ -1,6 +1,10 @@
 language: python
 python:
-  - "3.3"
-  - "3.4"
-  - "nightly"
-script: python -m unittest
+  - '3.3'
+  - '3.4'
+  - 'nightly'
+before_install:
+  - pip install pep8
+script:
+  - pep8 --max-line-length=120 .
+  - python -m unittest
