@@ -10,9 +10,7 @@ def qualifier(test):
 
 def save_points(o, points, dst):
     q = qualifier(o)
-    for point in points:
-        if point not in dst[q]:
-            dst[q].append(point)
+    dst[q] += filter(lambda point: point not in dst[q], points)
 
 
 def points(*points):
@@ -21,7 +19,6 @@ def points(*points):
         if isclass(o):
             save_points(o, points, point_register['suite'])
         elif isfunction(o):
-            # pdb.set_trace()
             save_points(o, points, point_register['test'])
         else:
             raise Exception("Expected decorator object '%s' type to be Class or Function but was %s." % (o, type(o)))
@@ -35,5 +32,19 @@ def points(*points):
     return points_wrapper
 
 
-def getPoints():
-    return point_register
+# TODO: Add support for nested classes.
+def _parse_points(test):
+    name = _name_test(test)
+    testPoints = point_register['test']
+    points = testPoints[name]
+    key = name[:name.rfind('.')]
+    suitePoints = point_register['suite'][key]
+    points += suitePoints
+    return points
+
+
+def _name_test(test):
+    module = test.__module__
+    classname = test.__class__.__name__
+    testName = test._testMethodName
+    return module + '.' + classname + '.' + testName

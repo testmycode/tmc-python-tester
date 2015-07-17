@@ -1,5 +1,5 @@
 from unittest.runner import TextTestResult
-from .points import getPoints
+from .points import _parse_points, _name_test
 import atexit
 import json
 import traceback
@@ -28,19 +28,15 @@ class TMCResult(TextTestResult):
         self.addResult(test, 'errored', err)
 
     def addResult(self, test, status, err=None):
-        module = test.__module__
-        classname = test.__class__.__name__
-        testName = test.__dict__['_testMethodName']
-        name = module + '.' + classname + '.' + testName
-        points = self._parsePoints(name)
+        points = _parse_points(test)
         message = ""
         backtrace = []
         if err is not None:
-            message = err[1].__str__()
+            message = str(err[1])
             backtrace = traceback.format_tb(err[2])
 
         details = {
-            'name': name,
+            'name': _name_test(test),
             'status': status,
             'message': message,
             'points': points,
@@ -48,19 +44,8 @@ class TMCResult(TextTestResult):
         }
         results.append(details)
 
-    # TODO: Add support for nested classes.
-    def _parsePoints(self, name):
-        testPoints = getPoints()['test']
-        points = testPoints[name]
-        li = name.split('.')
-        li.pop()
-        key = '.'.join(li)
-        suitePoints = getPoints()['suite'][key]
-        points += suitePoints
-        return points
-
     # TODO: Do not do this if not using TMCTestRunner
     @atexit.register
     def write_output():
-        with open('tmc_test_results.json', 'w') as f:
+        with open('.tmc_test_results.json', 'w') as f:
             json.dump(results, f, ensure_ascii=False)

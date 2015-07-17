@@ -1,8 +1,8 @@
 from unittest import TextTestRunner, TestLoader
 from .result import TMCResult
-from .points import getPoints
+from .points import _parse_points, _name_test
+from itertools import chain
 import json
-import pdb
 
 
 class TMCTestRunner(TextTestRunner):
@@ -16,32 +16,17 @@ class TMCTestRunner(TextTestRunner):
 
     def run(self, test):
         print('Running tests with some TMC magic...')
-        result = super(TMCTestRunner, self).run(test)
-        return result
+        return super(TMCTestRunner, self).run(test)
 
-    # TODO: A lot of duplication from result
     def available_points(self):
         testLoader = TestLoader()
         tests = testLoader.discover('.', 'test*.py', None)
-        result = {}
-        for testa in tests._tests:
-            for testb in testa._tests:
-                for test in testb._tests:
-                    module = test.__module__
-                    classname = test.__class__.__name__
-                    testName = test.__dict__['_testMethodName']
-                    name = module + '.' + classname + '.' + testName
-                    points = self._parsePoints(name)
-                    result[name] = points
-        print(json.dumps(result))
+        tests = list(chain(*chain(*tests._tests)))
 
-    # TODO: Add support for nested classes.
-    def _parsePoints(self, name):
-        testPoints = getPoints()['test']
-        points = testPoints[name]
-        li = name.split('.')
-        li.pop()
-        key = '.'.join(li)
-        suitePoints = getPoints()['suite'][key]
-        points += suitePoints
-        return points
+        points = map(_parse_points, tests)
+        names = map(_name_test, tests)
+
+        result = dict(zip(names, points))
+
+        with open('.available_points.json', 'w') as f:
+            json.dump(result, f, ensure_ascii=False)
