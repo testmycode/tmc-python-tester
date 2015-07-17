@@ -1,5 +1,5 @@
 import unittest
-import subprocess
+from subprocess import Popen, DEVNULL
 import json
 import os
 
@@ -9,11 +9,14 @@ class TestEverything(unittest.TestCase):
     def __init__(self, args):
         super(TestEverything, self).__init__(args)
         self.dir = os.path.dirname(os.path.realpath(__file__))
+        self.command = ['python3', '-m', 'tmc']
+        self.cwd = lambda folder: self.dir + '/resources/' + folder + '/test'
+        self.results_path = lambda folder: self.cwd(folder) + '/.tmc_test_results.json'
 
     def test_project_with_no_points(self):
-        sb = subprocess.Popen(['python3', '-m', 'tmc'], cwd=self.dir + '/resources/no_points/test', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('no_points'), stdout=DEVNULL, stderr=DEVNULL)
         sb.wait()
-        with open(self.dir + '/resources/no_points/test/.tmc_test_results.json') as file:
+        with open(self.results_path('no_points')) as file:
             data = json.load(file)
         test = data[0]
         self.assertEqual(test['status'], 'passed')
@@ -23,9 +26,9 @@ class TestEverything(unittest.TestCase):
         self.assertEqual(test['backtrace'], [])
 
     def test_project_with_test_points(self):
-        sb = subprocess.Popen(['python3', '-m', 'tmc'], cwd=self.dir + '/resources/test_points/test', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('test_points'), stdout=DEVNULL, stderr=DEVNULL)
         sb.wait()
-        with open(self.dir + '/resources/test_points/test/.tmc_test_results.json') as file:
+        with open(self.results_path('test_points')) as file:
             data = json.load(file)
         test = data[0]
         self.assertEqual(test['status'], 'passed')
@@ -35,31 +38,31 @@ class TestEverything(unittest.TestCase):
         self.assertEqual(test['backtrace'], [])
 
     def test_project_with_class_points(self):
-        sb = subprocess.Popen(['python3', '-m', 'tmc'], cwd=self.dir + '/resources/class_points/test', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('class_points'), stdout=DEVNULL, stderr=DEVNULL)
         sb.wait()
-        with open(self.dir + '/resources/class_points/test/.tmc_test_results.json') as file:
+        with open(self.results_path('class_points')) as file:
             data = json.load(file)
         self.assertEqual(data[0]['points'], ['1.5'])
         self.assertEqual(data[1]['points'], ['1.5'])
 
     def test_failing_tests_fail(self):
-        sb = subprocess.Popen(['python3', '-m', 'tmc'], cwd=self.dir + '/resources/failing/test', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('failing'), stdout=DEVNULL, stderr=DEVNULL)
         sb.wait()
-        with open(self.dir + '/resources/failing/test/.tmc_test_results.json') as file:
+        with open(self.results_path('failing')) as file:
             data = json.load(file)
         self.assertEqual(data[0]['status'], 'failed')
 
     def test_erroring_tests_error(self):
-        sb = subprocess.Popen(['python3', '-m', 'tmc'], cwd=self.dir + '/resources/erroring/test', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('erroring'), stdout=DEVNULL, stderr=DEVNULL)
         sb.wait()
-        with open(self.dir + '/resources/erroring/test/.tmc_test_results.json') as file:
+        with open(self.results_path('erroring')) as file:
             data = json.load(file)
         self.assertEqual(data[0]['status'], 'errored')
 
     def test_multiple_files(self):
-        sb = subprocess.Popen(['python3', '-m', 'tmc'], cwd=self.dir + '/resources/multiple_files/test', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('multiple_files'), stdout=DEVNULL, stderr=DEVNULL)
         sb.wait()
-        with open(self.dir + '/resources/multiple_files/test/.tmc_test_results.json') as file:
+        with open(self.results_path('multiple_files')) as file:
             data = json.load(file)
         self.assertEqual(len(data), 2)
 

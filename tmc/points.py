@@ -28,7 +28,8 @@ def points(*points):
         raise Exception("You need to define at least one point in the points decorator declaration")
     for point in points:
         if type(point) is not str:
-            raise Exception("Points decorator argument '%s' needs to be a string, but was %s." % (point, type(point).__name__))
+            msg = "Points decorator argument '%s' needs to be a string, but was %s." % (point, type(point).__name__)
+            raise Exception(msg)
     return points_wrapper
 
 
