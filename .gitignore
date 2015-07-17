@@ -57,4 +57,5 @@ docs/_build/
 target/
 
 # TMC files
-tmc_test_results.json
+.tmc_test_results.json
+.available_points.json
