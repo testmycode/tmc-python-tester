@@ -1,5 +1,5 @@
 import unittest
-from subprocess import Popen, DEVNULL
+from subprocess import Popen
 import json
 import os
 
@@ -12,9 +12,10 @@ class TestEverything(unittest.TestCase):
         self.command = ['python3', '-m', 'tmc']
         self.cwd = lambda folder: self.dir + '/resources/' + folder + '/test'
         self.results_path = lambda folder: self.cwd(folder) + '/.tmc_test_results.json'
+        self.devnull = open(os.devnull, 'w')
 
     def test_project_with_no_points(self):
-        sb = Popen(self.command, cwd=self.cwd('no_points'), stdout=DEVNULL, stderr=DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('no_points'), stdout=self.devnull, stderr=self.devnull)
         sb.wait()
         with open(self.results_path('no_points')) as file:
             data = json.load(file)
@@ -26,7 +27,7 @@ class TestEverything(unittest.TestCase):
         self.assertEqual(test['backtrace'], [])
 
     def test_project_with_test_points(self):
-        sb = Popen(self.command, cwd=self.cwd('test_points'), stdout=DEVNULL, stderr=DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('test_points'), stdout=self.devnull, stderr=self.devnull)
         sb.wait()
         with open(self.results_path('test_points')) as file:
             data = json.load(file)
@@ -38,7 +39,7 @@ class TestEverything(unittest.TestCase):
         self.assertEqual(test['backtrace'], [])
 
     def test_project_with_class_points(self):
-        sb = Popen(self.command, cwd=self.cwd('class_points'), stdout=DEVNULL, stderr=DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('class_points'), stdout=self.devnull, stderr=self.devnull)
         sb.wait()
         with open(self.results_path('class_points')) as file:
             data = json.load(file)
@@ -46,21 +47,21 @@ class TestEverything(unittest.TestCase):
         self.assertEqual(data[1]['points'], ['1.5'])
 
     def test_failing_tests_fail(self):
-        sb = Popen(self.command, cwd=self.cwd('failing'), stdout=DEVNULL, stderr=DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('failing'), stdout=self.devnull, stderr=self.devnull)
         sb.wait()
         with open(self.results_path('failing')) as file:
             data = json.load(file)
         self.assertEqual(data[0]['status'], 'failed')
 
     def test_erroring_tests_error(self):
-        sb = Popen(self.command, cwd=self.cwd('erroring'), stdout=DEVNULL, stderr=DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('erroring'), stdout=self.devnull, stderr=self.devnull)
         sb.wait()
         with open(self.results_path('erroring')) as file:
             data = json.load(file)
         self.assertEqual(data[0]['status'], 'errored')
 
     def test_multiple_files(self):
-        sb = Popen(self.command, cwd=self.cwd('multiple_files'), stdout=DEVNULL, stderr=DEVNULL)
+        sb = Popen(self.command, cwd=self.cwd('multiple_files'), stdout=self.devnull, stderr=self.devnull)
         sb.wait()
         with open(self.results_path('multiple_files')) as file:
             data = json.load(file)
