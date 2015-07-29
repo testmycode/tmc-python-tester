@@ -1,8 +1,7 @@
-from setuptools import setup, find_packages
-from distutils.util import convert_path
+from setuptools import setup
 
 setup(
-    name='tmc-python3-utils',
+    name='tmc-python-tester',
     version='0.0.1',
     author='Joni Salmi <josalmi@cs.helsinki.fi>, ' +
            'Henrik Nygren <nygrenh@gmail.com>, ' +
@@ -12,7 +11,7 @@ setup(
     license='BSD',
     platforms=['Any'],
     keywords=[
-        'pyunit', 'unittest', 'junit xml', 'report', 'testrunner', 'xmlrunner'
+        'unittest', 'testrunner', 'tmc', 'tmc-langs', 'points', 'json'
     ],
     url='http://github.com/rage/tmc-python3-utils/tree/master/',
     zip_safe=False,
@@ -24,5 +23,3 @@ setup(
         ]
     }
 )
-'
-'
