@@ -41,6 +41,7 @@ Now `.tmc_test_results.json` will contain the test results:
         "backtrace": [],
         "message": "",
         "name": "test_something.TestSomething.test_something",
+        "passed": true,
         "points": [
             "1.1"
         ],

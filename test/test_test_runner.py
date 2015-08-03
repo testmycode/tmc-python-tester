@@ -33,6 +33,7 @@ class TestEverything(unittest.TestCase):
             data = json.load(file)
         test = data[0]
         self.assertEqual(test['status'], 'passed')
+        self.assertEqual(test['passed'], True)
         self.assertEqual(test['name'], 'test_points.TestPoints.test_somepoints')
         self.assertEqual(test['points'], ['1.1'])
         self.assertEqual(test['message'], '')
@@ -52,6 +53,7 @@ class TestEverything(unittest.TestCase):
         with open(self.results_path('failing')) as file:
             data = json.load(file)
         self.assertEqual(data[0]['status'], 'failed')
+        self.assertEqual(data[0]['passed'], False)
 
     def test_erroring_tests_error(self):
         sb = Popen(self.command, cwd=self.cwd('erroring'), stdout=self.devnull, stderr=self.devnull)
@@ -59,6 +61,7 @@ class TestEverything(unittest.TestCase):
         with open(self.results_path('erroring')) as file:
             data = json.load(file)
         self.assertEqual(data[0]['status'], 'errored')
+        self.assertEqual(data[0]['passed'], False)
 
     def test_multiple_files(self):
         sb = Popen(self.command, cwd=self.cwd('multiple_files'), stdout=self.devnull, stderr=self.devnull)
