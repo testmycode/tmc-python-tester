@@ -10,10 +10,8 @@ class TestEverything(unittest.TestCase):
         super(TestEverything, self).__init__(args)
         self.dir = os.path.dirname(os.path.realpath(__file__))
         self.command = ['python3', '-m', 'tmc']
-        self.cwd = lambda folder: self.dir + '/resources/' + folder + '/test'
-        self.project_path = lambda folder: self.dir + '/resources/' + folder
+        self.cwd = lambda folder: self.dir + '/resources/' + folder
         self.results_path = lambda folder: self.cwd(folder) + '/.tmc_test_results.json'
-        self.presults_path = lambda folder: self.project_path(folder) + '/.tmc_test_results.json'
         self.devnull = open(os.devnull, 'w')
 
     def test_project_with_no_points(self):
@@ -23,7 +21,7 @@ class TestEverything(unittest.TestCase):
             data = json.load(file)
         test = data[0]
         self.assertEqual(test['status'], 'passed')
-        self.assertEqual(test['name'], 'test_points.TestEverything.test_new')
+        self.assertEqual(test['name'], 'test.test_points.TestEverything.test_new')
         self.assertEqual(test['points'], [])
         self.assertEqual(test['message'], '')
         self.assertEqual(test['backtrace'], [])
@@ -36,7 +34,7 @@ class TestEverything(unittest.TestCase):
         test = data[0]
         self.assertEqual(test['status'], 'passed')
         self.assertEqual(test['passed'], True)
-        self.assertEqual(test['name'], 'test_points.TestPoints.test_somepoints')
+        self.assertEqual(test['name'], 'test.test_points.TestPoints.test_somepoints')
         self.assertEqual(test['points'], ['1.1'])
         self.assertEqual(test['message'], '')
         self.assertEqual(test['backtrace'], [])
@@ -73,9 +71,9 @@ class TestEverything(unittest.TestCase):
         self.assertEqual(len(data), 2)
 
     def test_complex_exercise(self):
-        sb = Popen(self.command, cwd=self.project_path('complex'), stdout=self.devnull, stderr=self.devnull)
+        sb = Popen(self.command, cwd=self.cwd('complex'), stdout=self.devnull, stderr=self.devnull)
         sb.wait()
-        with open(self.presults_path('complex')) as file:
+        with open(self.results_path('complex')) as file:
             data = json.load(file)
         self.assertEqual(len(data), 38)
         for datum in data:
