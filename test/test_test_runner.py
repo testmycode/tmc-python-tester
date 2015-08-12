@@ -11,7 +11,9 @@ class TestEverything(unittest.TestCase):
         self.dir = os.path.dirname(os.path.realpath(__file__))
         self.command = ['python3', '-m', 'tmc']
         self.cwd = lambda folder: self.dir + '/resources/' + folder + '/test'
+        self.project_path = lambda folder: self.dir + '/resources/' + folder
         self.results_path = lambda folder: self.cwd(folder) + '/.tmc_test_results.json'
+        self.presults_path = lambda folder: self.project_path(folder) + '/.tmc_test_results.json'
         self.devnull = open(os.devnull, 'w')
 
     def test_project_with_no_points(self):
@@ -69,6 +71,16 @@ class TestEverything(unittest.TestCase):
         with open(self.results_path('multiple_files')) as file:
             data = json.load(file)
         self.assertEqual(len(data), 2)
+
+    def test_complex_exercise(self):
+        sb = Popen(self.command, cwd=self.project_path('complex'), stdout=self.devnull, stderr=self.devnull)
+        sb.wait()
+        with open(self.presults_path('complex')) as file:
+            data = json.load(file)
+        self.assertEqual(len(data), 38)
+        for datum in data:
+            self.assertEqual(datum['status'], 'passed')
+
 
 if __name__ == '__main__':
     unittest.main()

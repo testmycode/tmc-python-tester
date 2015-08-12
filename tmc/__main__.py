@@ -8,4 +8,4 @@ if sys.argv.__len__() > 1 and sys.argv[1] == 'available_points':
     sys.exit()
 
 main = TestProgram
-main(testRunner=TMCTestRunner, module=None, failfast=False)
+main(testRunner=TMCTestRunner, module=None, failfast=False, buffer=True)
