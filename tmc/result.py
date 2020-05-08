@@ -48,5 +48,5 @@ class TMCResult(TextTestResult):
     # TODO: Do not do this if not using TMCTestRunner
     @atexit.register
     def write_output():
-        with open('.tmc_test_results.json', 'w') as f:
+        with open('.tmc_test_results.json', 'w', encoding='utf8') as f:
             json.dump(results, f, ensure_ascii=False)

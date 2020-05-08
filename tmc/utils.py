@@ -2,6 +2,21 @@ import importlib
 import sys
 
 
+def load_module(pkg):
+    try:
+        return importlib.import_module(pkg)
+    except ModuleNotFoundError:
+        return AssertionError('Tehtävätiedostoa {} ei löytynyt.'.format(pkg))
+    except Exception:
+        return AssertionError('Tehtävän suorittaminen epäonnistui. Varmista, että saat ohjelman suoritettua loppuun.')
+
+
+def reload_module(module):
+    if isinstance(module, AssertionError):
+        raise module
+    importlib.reload(module)
+
+
 def load(pkg, method, err=None):
     if not err:
         err = '{0}.{1} does not exist!'.format(pkg, method)
