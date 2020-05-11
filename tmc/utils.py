@@ -2,13 +2,19 @@ import importlib
 import sys
 
 
-def load_module(pkg):
+def load_module(pkg, lang='en'):
+    module_not_found = '{0} does not exist!'.format(pkg)
+    other_exception = 'Running exercise {0} failed. Please make sure that you can run your code.'.format(pkg)
+    if lang == 'fi':
+        module_not_found = 'Tehtävätiedostoa {0} ei löytynyt.'.format(pkg)
+        other_exception = 'Tehtävän {0} suorittaminen epäonnistui. \
+            Varmista, että saat ohjelman suoritettua loppuun.'.format(pkg)
     try:
         return importlib.import_module(pkg)
     except ModuleNotFoundError:
-        return AssertionError('Tehtävätiedostoa {} ei löytynyt.'.format(pkg))
+        return AssertionError(module_not_found)
     except Exception:
-        return AssertionError('Tehtävän suorittaminen epäonnistui. Varmista, että saat ohjelman suoritettua loppuun.')
+        return AssertionError(other_exception)
 
 
 def reload_module(module):
@@ -17,9 +23,13 @@ def reload_module(module):
     importlib.reload(module)
 
 
-def load(pkg, method, err=None):
+def load(pkg, method, err=None, lang='en'):
+    module_not_found = '{0}.{1} does not exist!'.format(pkg, method)
+    if lang == 'fi':
+        module_not_found = 'Tehtävätiedostoa {0}.{1} ei löytynyt.'.format(pkg, method)
+
     if not err:
-        err = '{0}.{1} does not exist!'.format(pkg, method)
+        err = module_not_found
 
     def fail(*args, **kwargs):
         raise AssertionError(err)
