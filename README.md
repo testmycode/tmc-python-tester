@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/testmycode/tmc-python-tester.svg?branch=master)](https://travis-ci.org/github/testmycode/tmc-python-tester)
 
-A unittest-based test runner that [tmc-langs](https://github.com/rage/tmc-langs) uses to check exercises. Runs tests and ouputs the results in JSON format. Allows one to assign points to individual test cases or classes with `@points` decorators.
+A unittest-based test runner that [tmc-langs](https://github.com/rage/tmc-langs) and [tmc-langs-rust](https://github.com/rage/tmc-langs-rust) uses to check exercises. Runs tests and ouputs the results in JSON format. Allows one to assign points to individual test cases or classes with `@points` decorators.
 
 ## Usage
 
