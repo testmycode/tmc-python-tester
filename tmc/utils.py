@@ -2,9 +2,19 @@ import importlib
 import sys
 
 
-# Used to load a module without a main method and if __name__ == "__main__": main()
-# When loaded, runs the code immediatly
+
 def load_module(pkg, lang='en'):
+    """
+    Used to load a module without::
+
+        def main()
+            pass
+
+        if __name__ == "__main__": 
+            main()
+
+    When loaded, runs the code immediately.
+    """
     module_not_found = 'File {0} does not exist!'.format(pkg)
     other_exception = 'Running exercise {0} failed. Please make sure that you can run your code.'.format(pkg)
     exit_called = 'Make sure your program does not exit with an exit() command.'
@@ -25,15 +35,33 @@ def load_module(pkg, lang='en'):
         return AssertionError(exit_called)
 
 
-# Runs the module code again, used when no main() defined
 def reload_module(module):
+    """Runs the module code again, used when no main() defined"""
     if isinstance(module, AssertionError):
         raise module
     importlib.reload(module)
 
 
-# Loads a method from a module, doesn't run the code, needs to be called in tests.
 def load(pkg, method, lang='en', err=None):
+    """
+    Loads a method from a module, doesn't run the code, needs to be called in tests.
+    
+    Exercise Example::
+
+        import numpy as np
+
+        def main():
+            [print(line) for line in range(4)]
+
+    Test Example::
+
+        module_name="src.filename"
+        main = load(module_name, "main")
+        def test_lines(self):
+            main()
+            result = get_out().split('\\n')
+            self.assertEqual(len(result), 4, msg="The output should contain exactly four lines!")
+    """
     module_not_found = 'Function {1} was not found in file {0}.'.format(pkg, method)
     if lang == 'fi':
         module_not_found = 'Tiedostosta {0} ei löytynyt funktiota {1}.'.format(pkg, method)
@@ -42,11 +70,15 @@ def load(pkg, method, lang='en', err=None):
         err = module_not_found
 
     def fail(*args, **kwargs):
+        if args:
+            raise AssertionError(args[0]) 
         raise AssertionError(err)
 
     try:
         return getattr(importlib.import_module(pkg), method)
-    except Exception:
+    except ModuleNotFoundError as mnf:
+        return fail(mnf)
+    except Exception as e:
         return fail
 
 
@@ -63,12 +95,14 @@ def any_contains(needle, haystacks):
 
 
 def check_source(module):
-    '''
-    Example:\n
-    def test_no_global(self):\n
-        result, line = check_source(self.module)\n
-        self.assertTrue(result, "Varmista, ettei koodissa ole toiminnallisuutta funktioiden ja pääohjelman ulkopuolella.\nAsiaan liittyvä rivi: "+line)\n
-    '''
+    """
+    Check that module doesn't have any globals.
+    Example::
+
+        def test_no_global(self):
+            result, line = check_source(self.module)
+            self.assertTrue(result, "Varmista, ettei koodissa ole toiminnallisuutta funktioiden ja pääohjelman ulkopuolella.\\nAsiaan liittyvä rivi: "+line)
+    """
     source = module.__file__
     allowed = []
     allowed.append("import ")
@@ -93,17 +127,22 @@ def check_source(module):
 
 
 class patch_helper(object):
-    '''
-    patch_helper code copied from Data Analysis with Python.\n
-    Usage example:\n
-    from tmc.utils import load, get_out, patch_helper
+    """
+    patch_helper code copied from Data Analysis with Python.
+    Example::
 
-    module_name="src.file_listing"\n
-    ph = patch_helper(module_name)\n
-    In tests file, if you want to patch "src.file_listing.re.compile" use following:\n
-    def test_content(self):\n
-        patch(ph('re.compile'), side_effect=re.compile) as c:
-    '''
+        from tmc.utils import load, get_out, patch_helper
+
+        module_name='src.file_listing'
+        ph = patch_helper(module_name)
+
+    In tests file, if you want to patch "src.file_listing.re.compile" use following:
+    Example::
+
+        def test_content(self):
+            patch(ph('re.compile'), side_effect=re.compile) as c:
+                ...
+    """
 
     def __init__(self, module_name):
         import importlib
