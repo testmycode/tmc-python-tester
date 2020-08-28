@@ -44,7 +44,7 @@ def reload_module(module):
 def load(pkg, method, lang='en', err=None):
     """
     Loads a method from a module, doesn't run the code, needs to be called in tests.
-    
+
     Exercise Example::
 
         import numpy as np
@@ -100,7 +100,7 @@ def check_source(module):
 
         def test_no_global(self):
             result, line = check_source(self.module)
-            self.assertTrue(result, "Varmista, ettei koodissa ole toiminnallisuutta funktioiden ja pääohjelman ulkopuolella.\\nAsiaan liittyvä rivi: "+line)
+            self.assertTrue(result, "Make sure no code is outside functions.\\nRow: " + line)
     """
     source = module.__file__
     allowed = []

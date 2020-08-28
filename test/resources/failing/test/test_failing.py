@@ -9,5 +9,6 @@ class TestFailing(unittest.TestCase):
     def test_new(self):
         self.assertEqual("a", "b")
 
+
 if __name__ == '__main__':
     unittest.main()

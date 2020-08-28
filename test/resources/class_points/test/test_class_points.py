@@ -11,5 +11,6 @@ class TestClassPoints(unittest.TestCase):
     def test_more_class_points(self):
         self.assertEqual("a", "a")
 
+
 if __name__ == '__main__':
     unittest.main()

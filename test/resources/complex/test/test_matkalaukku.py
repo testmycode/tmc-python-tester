@@ -169,5 +169,6 @@ class MatkalaukkuTest(unittest.TestCase):
                          "Kun matkalaukussa on yksi 1 kg painoinen esine ja yksi 2 kg painoinen esine, " +
                          "tulee matkalaukun __str__() metodin palauttaa '2 tavaraa (3 kg)")
 
+
 if __name__ == '__main__':
     unittest.main()
