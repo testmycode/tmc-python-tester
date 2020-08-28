@@ -38,5 +38,6 @@ class TavaraTest(unittest.TestCase):
                          Tavara("Tiili", 2).__str__(),
                          "__str__() metodisi palauttaa väärän arvon kun tavaran nimi on 'Tiili' ja paino 2 kg")
 
+
 if __name__ == '__main__':
     unittest.main()

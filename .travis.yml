@@ -9,7 +9,7 @@ matrix:
   allow_failures:
     - python: 'nightly'
 before_install:
-  - pip install pep8
+  - pip install pycodestyle
 script:
-  - pep8 --max-line-length=120 .
+  - pycodestyle --max-line-length=120 --max-doc-length=170 .
   - python -m unittest discover

@@ -9,5 +9,6 @@ class TestErroring(unittest.TestCase):
     def test_erroring(self):
         doSomethingIllegal
 
+
 if __name__ == '__main__':
     unittest.main()
