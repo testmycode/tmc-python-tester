@@ -2,7 +2,6 @@ import importlib
 import sys
 
 
-
 def load_module(pkg, lang='en'):
     """
     Used to load a module without::
@@ -10,7 +9,7 @@ def load_module(pkg, lang='en'):
         def main()
             pass
 
-        if __name__ == "__main__": 
+        if __name__ == "__main__":
             main()
 
     When loaded, runs the code immediately.
@@ -71,7 +70,7 @@ def load(pkg, method, lang='en', err=None):
 
     def fail(*args, **kwargs):
         if args:
-            raise AssertionError(args[0]) 
+            raise AssertionError(args[0])
         raise AssertionError(err)
 
     try:
@@ -122,8 +121,8 @@ def check_source(module):
                 if line.startswith(prefix):
                     ok = True
             if not ok:
-                return (False,line)
-        return (True,"")
+                return (False, line)
+        return (True, "")
 
 
 class patch_helper(object):

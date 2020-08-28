@@ -44,5 +44,6 @@ class TestAvailablePoints(unittest.TestCase):
         self.assertEqual(len(data['test.test_one.TestOne.test_new']), 2)
         self.assertEqual(len(data['test.test_two.TestTwo.test_new']), 2)
 
+
 if __name__ == '__main__':
     unittest.main()
