@@ -62,17 +62,48 @@ def any_contains(needle, haystacks):
     any(map(lambda haystack: needle in haystack, haystacks))
 
 
-# patch_helper code copied from Data Analysis with Python tmc module
-# Example:
-# from tmc.utils import load, get_out, patch_helper
+def check_source(module):
+    '''
+    Example:\n
+    def test_no_global(self):\n
+        result, line = check_source(self.module)\n
+        self.assertTrue(result, "Varmista, ettei koodissa ole toiminnallisuutta funktioiden ja pääohjelman ulkopuolella.\nAsiaan liittyvä rivi: "+line)\n
+    '''
+    source = module.__file__
+    allowed = []
+    allowed.append("import ")
+    allowed.append("from ")
+    allowed.append("def ")
+    allowed.append("class ")
+    allowed.append(" ")
+    allowed.append("\t")
+    allowed.append("#")
+    allowed.append("if __name__")
+    with open(source) as file:
+        for line in file.readlines():
+            if line.strip() == "":
+                continue
+            ok = False
+            for prefix in allowed:
+                if line.startswith(prefix):
+                    ok = True
+            if not ok:
+                return (False,line)
+        return (True,"")
 
-# module_name="src.file_listing"
-# ph = patch_helper(module_name)
-# In tests file, if you want to patch "src.file_listing.re.compile" use following:
-# def test_content(self):
-#   patch(ph('re.compile'), side_effect=re.compile) as c:
-#       ...
+
 class patch_helper(object):
+    '''
+    patch_helper code copied from Data Analysis with Python.\n
+    Usage example:\n
+    from tmc.utils import load, get_out, patch_helper
+
+    module_name="src.file_listing"\n
+    ph = patch_helper(module_name)\n
+    In tests file, if you want to patch "src.file_listing.re.compile" use following:\n
+    def test_content(self):\n
+        patch(ph('re.compile'), side_effect=re.compile) as c:
+    '''
 
     def __init__(self, module_name):
         import importlib
