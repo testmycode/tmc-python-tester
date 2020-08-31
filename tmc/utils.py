@@ -3,6 +3,7 @@ import sys
 
 from unittest.mock import MagicMock
 
+
 def load_module(pkg, lang='en'):
     """
     Used to load a module without::
@@ -126,17 +127,46 @@ def check_source(module):
         return (True, "")
 
 
+def s(mj):
+    mj = mj.strip()
+    while "  " in mj:
+        mj = mj.replace("  ", " ")
+    return mj
+
+
+def sanitize(mj):
+    """
+    Sanitize string, remove all unnecessary whitespaces.
+    """
+    return '\n'.join([s(m) for m in mj.split('\n')])
+
+
+def assert_ignore_ws(self, was, expected, errmsg=''):
+    """
+    Assert Ignore all whitespace in output.
+    Example::
+
+        assert_ignore_ws(self, output[0], 'Ukko Nooa', "First line doesn't match. ")
+    """
+    xmj1 = ''.join( [ x for x in s(was).split(' ') if len(x)>0])
+    xmj2 = ''.join( [ x for x in s(expected).split(' ') if len(x)>0])
+    er = f'{errmsg}Tulostit\n{was}\nodotettiin\n{expected}'
+    self.assertTrue(xmj1 == xmj2, er)
+
+
 def spy_decorator(method_to_decorate, name):
     """
     This solution to wrap a patched method comes originally from
     https://stackoverflow.com/questions/25608107/python-mock-patching-a-method-without-obstructing-implementation
     """
     mock = MagicMock(name="%s method" % name)
+
     def wrapper(self, *args, **kwargs):
         mock(*args, **kwargs)
         return method_to_decorate(self, *args, **kwargs)
     wrapper.mock = mock
     return wrapper
+
 
 class patch_helper(object):
     """
