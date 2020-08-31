@@ -1,6 +1,7 @@
 import importlib
 import sys
 
+from unittest.mock import MagicMock
 
 def load_module(pkg, lang='en'):
     """
@@ -124,6 +125,18 @@ def check_source(module):
                 return (False, line)
         return (True, "")
 
+
+def spy_decorator(method_to_decorate, name):
+    """
+    This solution to wrap a patched method comes originally from
+    https://stackoverflow.com/questions/25608107/python-mock-patching-a-method-without-obstructing-implementation
+    """
+    mock = MagicMock(name="%s method" % name)
+    def wrapper(self, *args, **kwargs):
+        mock(*args, **kwargs)
+        return method_to_decorate(self, *args, **kwargs)
+    wrapper.mock = mock
+    return wrapper
 
 class patch_helper(object):
     """
