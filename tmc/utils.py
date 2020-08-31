@@ -148,8 +148,8 @@ def assert_ignore_ws(self, was, expected, errmsg=''):
 
         assert_ignore_ws(self, output[0], 'Ukko Nooa', "First line doesn't match. ")
     """
-    xmj1 = ''.join( [ x for x in s(was).split(' ') if len(x)>0])
-    xmj2 = ''.join( [ x for x in s(expected).split(' ') if len(x)>0])
+    xmj1 = ''.join([x for x in s(was).split(' ') if len(x) > 0])
+    xmj2 = ''.join([x for x in s(expected).split(' ') if len(x) > 0])
     er = f'{errmsg}Tulostit\n{was}\nodotettiin\n{expected}'
     self.assertTrue(xmj1 == xmj2, er)
 
