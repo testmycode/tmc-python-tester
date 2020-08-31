@@ -141,17 +141,17 @@ def sanitize(mj):
     return '\n'.join([s(m) for m in mj.split('\n')])
 
 
-def assert_ignore_ws(self, was, expected, errmsg=''):
-    """
-    Assert Ignore all whitespace in output.
-    Example::
+# def assert_ignore_ws(self, was, expected, errmsg=''):
+#     """
+#     Assert Ignore all whitespace in output.
+#     Example::
 
-        assert_ignore_ws(self, output[0], 'Ukko Nooa', "First line doesn't match. ")
-    """
-    xmj1 = ''.join([x for x in s(was).split(' ') if len(x) > 0])
-    xmj2 = ''.join([x for x in s(expected).split(' ') if len(x) > 0])
-    er = f'{errmsg}Tulostit\n{was}\nodotettiin\n{expected}'
-    self.assertTrue(xmj1 == xmj2, er)
+#         assert_ignore_ws(self, output[0], 'Ukko Nooa', "First line doesn't match. ")
+#     """
+#     xmj1 = ''.join([x for x in s(was).split(' ') if len(x) > 0])
+#     xmj2 = ''.join([x for x in s(expected).split(' ') if len(x) > 0])
+#     er = f'{errmsg}Tulostit\n{was}\nodotettiin\n{expected}'
+#     self.assertTrue(xmj1 == xmj2, er)
 
 
 def spy_decorator(method_to_decorate, name):
