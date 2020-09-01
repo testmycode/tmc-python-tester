@@ -68,7 +68,7 @@ for dir in *; do
 					
 					if [[ $(ls -la | grep ".tmcignore") ]]; then
 						echo "Skipped update for ${dir}/${subdir} due to .tmcignore file."
-						cd ..
+						cd .. # Leave exercise folder
 						continue
 					fi
 
@@ -84,12 +84,12 @@ for dir in *; do
 						if [[ $output == *"FAIL"* ]]; then
 							echo "Some test failed after update for ${dir}/${subdir}, please fix failed tests or add to ignored_subdirs and run again."
 							python -m tmc
-							git restore "tmc/."
+							# git restore "tmc/."
 							break
 						elif [[ $output == *"ERROR"* ]]; then
 							echo "Some test errored after update for ${dir}/${subdir}, please fix errors or add to ignored_subdirs and run again."
 							python -m tmc
-							git restore "tmc/."
+							# git restore "tmc/."
 							break
 						fi
 						
@@ -112,5 +112,8 @@ for dir in *; do
 done
 
 if [[ "$UPDATE" = true ]]; then
+	echo "Removing cloned tmc-python-tester repo."
 	rm -rf tmc-python-tester
 fi
+
+echo "Make sure to use 'git add -u (--patch)' after update, so you don't add model solution generated files into repository."
