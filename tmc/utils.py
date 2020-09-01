@@ -3,6 +3,8 @@ import sys
 
 from unittest.mock import MagicMock
 
+_stdout_pointer = 0
+
 
 def load_module(pkg, lang='en'):
     """
@@ -38,8 +40,10 @@ def load_module(pkg, lang='en'):
 
 def reload_module(module):
     """Runs the module code again, used when no main() defined"""
+    global _stdout_pointer
     if isinstance(module, AssertionError):
         raise module
+    _stdout_pointer = len(sys.stdout.getvalue())
     importlib.reload(module)
 
 
@@ -85,6 +89,11 @@ def load(pkg, method, lang='en', err=None):
 
 def get_stdout():
     return sys.stdout.getvalue().strip()
+
+
+def get_stdout_pointer():
+    global _stdout_pointer
+    return sys.stdout.getvalue()[_stdout_pointer:].strip()
 
 
 def get_stderr():
