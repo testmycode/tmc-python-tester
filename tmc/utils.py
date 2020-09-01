@@ -127,7 +127,7 @@ def check_source(module):
         return (True, "")
 
 
-def s(mj):
+def remove_extra_whitespace(mj):
     mj = mj.strip()
     while "  " in mj:
         mj = mj.replace("  ", " ")
@@ -138,20 +138,23 @@ def sanitize(mj):
     """
     Sanitize string, remove all unnecessary whitespaces.
     """
-    return '\n'.join([s(m) for m in mj.split('\n')])
+    return '\n'.join([remove_extra_whitespace(m) for m in mj.split('\n')])
 
 
-# def assert_ignore_ws(self, was, expected, errmsg=''):
-#     """
-#     Assert Ignore all whitespace in output.
-#     Example::
+def assert_ignore_ws(self, was, expected, errmsg='', lang='fi'):
+    """
+    Assert Ignore all whitespace in output.
+    Example::
 
-#         assert_ignore_ws(self, output[0], 'Ukko Nooa', "First line doesn't match. ")
-#     """
-#     xmj1 = ''.join([x for x in s(was).split(' ') if len(x) > 0])
-#     xmj2 = ''.join([x for x in s(expected).split(' ') if len(x) > 0])
-#     er = f'{errmsg}Tulostit\n{was}\nodotettiin\n{expected}'
-#     self.assertTrue(xmj1 == xmj2, er)
+        assert_ignore_ws(self, output[0], 'Ukko Nooa', "First line doesn't match. ")
+    """
+    xmj1 = ''.join([x for x in remove_extra_whitespace(was).split(' ') if len(x) > 0])
+    xmj2 = ''.join([x for x in remove_extra_whitespace(expected).split(' ') if len(x) > 0])
+    if lang == 'fi':
+        err = '{0}\nTulostit:\n{1}\nOdotettiin:\n{2}'.format(errmsg, was, expected)
+    else:
+        err = '{0}\nYou printed:\n{1}\nExpected:\n{2}'.format(errmsg, was, expected)
+    self.assertTrue(xmj1 == xmj2, err)
 
 
 def spy_decorator(method_to_decorate, name):

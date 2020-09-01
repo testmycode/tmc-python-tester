@@ -84,12 +84,12 @@ for dir in *; do
 						if [[ $output == *"FAIL"* ]]; then
 							echo "Some test failed after update for ${dir}/${subdir}, please fix failed tests or add to ignored_subdirs and run again."
 							python -m tmc
-							# git restore "tmc/."
+							git restore "tmc/."
 							break
 						elif [[ $output == *"ERROR"* ]]; then
 							echo "Some test errored after update for ${dir}/${subdir}, please fix errors or add to ignored_subdirs and run again."
 							python -m tmc
-							# git restore "tmc/."
+							git restore "tmc/."
 							break
 						fi
 						
