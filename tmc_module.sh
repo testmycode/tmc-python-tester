@@ -18,7 +18,7 @@ Where:
 
 # Manually ignored folders if needed
 ignored_dirs=("tmc-python-tester" ".vscode" "osax")
-ignored_subdirs=("02_merkkien_maara")
+ignored_subdirs=("")
 
 TEST=false
 UPDATE=false
