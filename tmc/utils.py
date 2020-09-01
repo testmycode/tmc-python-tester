@@ -88,10 +88,6 @@ def load(pkg, method, lang='en', err=None):
 
 
 def get_stdout():
-    return sys.stdout.getvalue().strip()
-
-
-def get_stdout_pointer():
     global _stdout_pointer
     return sys.stdout.getvalue()[_stdout_pointer:].strip()
 

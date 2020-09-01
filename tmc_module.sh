@@ -93,7 +93,7 @@ for dir in *; do
 							break
 						fi
 						
-						echo "All tests passed with new TMC Module for ${dir}/${subdir}."
+						echo "All tests passed for ${dir}/${subdir}."
 					fi
 					
 					cd .. # Go away from exercise folder
