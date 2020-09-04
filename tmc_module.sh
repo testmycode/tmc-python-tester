@@ -80,22 +80,26 @@ for dir in *; do
 
 					if [[ "$TEST" = true ]]; then
 						output=$((python -m tmc) 2>&1)
+						skipped=false
+						while [[ $output == *"FAIL"* || $output == *"ERROR"* ]]; do
 
-						if [[ $output == *"FAIL"* ]]; then
-							echo "Some test failed after update for ${dir}/${subdir}, please fix failed tests or add to ignored_subdirs and run again."
-							python -m tmc
-							# git restore "tmc/."
-							break
-						elif [[ $output == *"ERROR"* ]]; then
-							echo "Some test errored after update for ${dir}/${subdir}, please fix errors or add to ignored_subdirs and run again."
-							python -m tmc
-							# git restore "tmc/."
-							break
+								python -m tmc
+								echo ""
+								echo "Some test failed after update for ${dir}/${subdir}, please fix failed tests."
+								# git restore "tmc/."
+								read -n 1 -r -p "Press (s) to skip or any key to continue... " key
+								if [[ "$key" == "s" || "$key" == "S" ]]; then
+									skipped=true
+									echo ""
+									break
+								fi
+								output=$((python -m tmc) 2>&1)
+
+						done
+						if [[ "$skipped" = false ]]; then
+							echo "All tests passed for ${dir}/${subdir}."
 						fi
-						
-						echo "All tests passed for ${dir}/${subdir}."
 					fi
-					
 					cd .. # Go away from exercise folder
 					
 				else
