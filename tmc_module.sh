@@ -86,10 +86,10 @@ for dir in *; do
 								python -m tmc
 								echo ""
 								echo "Some test failed after update for ${dir}/${subdir}, please fix failed tests."
-								# git restore "tmc/."
 								read -n 1 -r -p "Press (s) to skip or any key to continue... " key
 								if [[ "$key" == "s" || "$key" == "S" ]]; then
 									skipped=true
+									git restore "tmc/."
 									echo ""
 									break
 								fi
