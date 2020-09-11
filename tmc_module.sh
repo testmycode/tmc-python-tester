@@ -1,15 +1,12 @@
 #!/bin/bash
 
 usage="$(basename "$0") [-t] [-u] [-p='part1'] -- Program to run tests and/or update the TMC Module for exercises
-
 Script goes through only following exercise structure:
-
 osa1/01_hymio
 osa1/02_ei_hymio
 ...
 osa3/01_input_file
 osa3/18_last_exercise
-
 Where:
     -t  		Runs tests for exercises
     -u  		Updates TMC Module from tmc-python-tester repository
@@ -79,9 +76,11 @@ for dir in *; do
 					fi
 
 					if [[ "$TEST" = true ]]; then
+
 						output=$((python -m tmc) 2>&1)
+
 						skipped=false
-						while [[ $output == *"FAIL"* || $output == *"ERROR"* ]]; do
+						while [[ "$output" =~ "FAIL" || "$output" =~ "ERROR" ]]; do
 
 								python -m tmc
 								echo ""
@@ -96,6 +95,7 @@ for dir in *; do
 								output=$((python -m tmc) 2>&1)
 
 						done
+
 						if [[ "$skipped" = false ]]; then
 							echo "All tests passed for ${dir}/${subdir}."
 						fi
@@ -112,12 +112,9 @@ for dir in *; do
         cd .. # Away from part/osa folder
 		
     fi
-
 done
-
 if [[ "$UPDATE" = true ]]; then
 	echo "Removing cloned tmc-python-tester repo."
 	rm -rf tmc-python-tester
 fi
-
 echo "Make sure to use 'git add -u (--patch)' after update, so you don't add model solution generated files into repository."
