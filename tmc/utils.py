@@ -102,7 +102,7 @@ def check_source(module):
     """
     try:
         source = module.__file__
-    except:
+    except Exception:
         raise Exception('Varmista, että koodin suoritus onnistuu')
     allowed = []
     allowed.append("import ")
