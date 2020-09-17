@@ -9,13 +9,10 @@ _stdout_pointer = 0
 def load_module(pkg, lang='en'):
     """
     Used to load a module without::
-
         def main()
             pass
-
         if __name__ == "__main__":
             main()
-
     When loaded, runs the code immediately.
     """
     module_not_found = 'File {0} does not exist!'.format(pkg)
@@ -50,16 +47,11 @@ def reload_module(module):
 def load(pkg, method, lang='en', err=None):
     """
     Loads a method from a module, doesn't run the code, needs to be called in tests.
-
     Exercise Example::
-
         import numpy as np
-
         def main():
             [print(line) for line in range(4)]
-
     Test Example::
-
         module_name="src.filename"
         main = load(module_name, "main")
         def test_lines(self):
@@ -104,12 +96,14 @@ def check_source(module):
     """
     Check that module doesn't have any globals.
     Example::
-
         def test_no_global(self):
             result, line = check_source(self.module)
             self.assertTrue(result, "Make sure no code is outside functions.\\nRow: " + line)
     """
-    source = module.__file__
+    try:
+        source = module.__file__
+    except:
+        raise Exception('Varmista, että koodin suoritus onnistuu')
     allowed = []
     allowed.append("import ")
     allowed.append("from ")
@@ -150,7 +144,6 @@ def assert_ignore_ws(self, was, expected, errmsg='', lang='fi'):
     """
     Assert Ignore all whitespace in output.
     Example::
-
         assert_ignore_ws(self, output[0], 'Ukko Nooa', "First line doesn't match. ")
     """
     xmj1 = ''.join([x for x in remove_extra_whitespace(was).split(' ') if len(x) > 0])
@@ -180,15 +173,11 @@ class patch_helper(object):
     """
     patch_helper code copied from Data Analysis with Python.
     Example::
-
         from tmc.utils import load, get_out, patch_helper
-
         module_name='src.file_listing'
         ph = patch_helper(module_name)
-
     In tests file, if you want to patch "src.file_listing.re.compile" use following:
     Example::
-
         def test_content(self):
             patch(ph('re.compile'), side_effect=re.compile) as c:
                 ...
