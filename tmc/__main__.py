@@ -1,11 +1,6 @@
 from unittest import TestProgram
 from .runner import TMCTestRunner
 import sys
-import os
-import django
-import django.conf
-from django.test.utils import get_runner
-from django.conf import settings
 
 django = False
 try:
@@ -14,9 +9,14 @@ try:
             (key, value) = line.split(":")
             django = (key.strip().lower() == "django") and (value.strip().lower() in ("y", "yes", "true", "t", "1"))
 except FileNotFoundError:
-    print(".tmcproject.yml not found.")
+    pass
 
 if django:
+    import os
+    import django
+    import django.conf
+    from django.test.utils import get_runner
+    from django.conf import settings
     os.environ['DJANGO_SETTINGS_MODULE'] = 'src.config.settings'
     django.setup()
 
@@ -30,6 +30,6 @@ if django:
     test_runner = TestRunner()
     failures = test_runner.run_tests(["test"])
     sys.exit(bool(failures))
-else:
-    main = TestProgram
-    main(testRunner=TMCTestRunner, module=None, failfast=False, buffer=True)
+
+main = TestProgram
+main(testRunner=TMCTestRunner, module=None, failfast=False, buffer=True)
