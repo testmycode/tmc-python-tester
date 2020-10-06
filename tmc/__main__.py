@@ -21,7 +21,7 @@ if django_defined:
     import django.conf
     from django.test.utils import get_runner
     from django.conf import settings
-    os.environ['DJANGO_SETTINGS_MODULE'] =  django_defined + '.config.settings'
+    os.environ['DJANGO_SETTINGS_MODULE'] = django_defined + '.config.settings'
     django.setup()
 
 if sys.argv.__len__() > 1 and sys.argv[1] == 'available_points':
