@@ -56,7 +56,7 @@ def load(pkg, method, lang='en', err=None):
         main = load(module_name, "main")
         def test_lines(self):
             main()
-            result = get_out().split('\\n')
+            result = get_stdout().split('\\n')
             self.assertEqual(len(result), 4, msg="The output should contain exactly four lines!")
     """
     module_not_found = 'Function {1} was not found in file {0}.'.format(pkg, method)
@@ -173,7 +173,7 @@ class patch_helper(object):
     """
     patch_helper code copied from Data Analysis with Python.
     Example::
-        from tmc.utils import load, get_out, patch_helper
+        from tmc.utils import load, get_stdout, patch_helper
         module_name='src.file_listing'
         ph = patch_helper(module_name)
     In tests file, if you want to patch "src.file_listing.re.compile" use following:
