@@ -6,9 +6,12 @@ django_defined = False
 try:
     with open('.tmcproject.yml') as f:
         for line in f:
-            (key, value) = line.split(":")
-            if (key.strip().lower() == "django") and (value.strip().lower() in ("server", "src")):
-                django_defined = value.strip().lower()
+            try:
+                (key, value) = line.split(":")
+                if key.strip().lower() == "django":
+                    django_defined = str(value.strip().lower())
+            except ValueError:
+                pass
 except FileNotFoundError:
     pass
 
