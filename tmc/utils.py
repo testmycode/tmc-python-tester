@@ -104,24 +104,25 @@ def check_source(module):
         source = module.__file__
     except Exception:
         raise Exception('Varmista, että koodin suoritus onnistuu')
-    allowed = []
-    allowed.append("import ")
-    allowed.append("from ")
-    allowed.append("def ")
-    allowed.append("class ")
-    allowed.append(" ")
-    allowed.append("\t")
-    allowed.append("#")
-    allowed.append("if __name__")
+    allowed = [
+        "import ",
+        "from ",
+        "def ",
+        "class ",
+        " ",
+        "\t",
+        "#",
+        "if __name__",
+        "@",
+    ]
     with open(source) as file:
         for line in file.readlines():
             if line.strip() == "":
                 continue
-            ok = False
             for prefix in allowed:
                 if line.startswith(prefix):
-                    ok = True
-            if not ok:
+                    break
+            else:
                 return (False, line)
         return (True, "")
 
