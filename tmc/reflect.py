@@ -52,3 +52,6 @@ class Reflect:
         elif ("_" + self.__classname + attribute) in dir(self.__obj):
             return getattr(self.__obj, "_" + self.__classname + attribute)
         return None 
+
+    def list_public_members(self):
+        return [x for x in dir(self.__obj) if not x.startswith("_")]
