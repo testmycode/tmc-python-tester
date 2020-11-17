@@ -1,5 +1,6 @@
 import importlib
 import sys
+import inspect
 
 from unittest.mock import MagicMock
 
@@ -37,10 +38,9 @@ def load_module(pkg, lang='en'):
 
 def reload_module(module):
     """Runs the module code again, used when no main() defined"""
-    global _stdout_pointer
     if isinstance(module, AssertionError):
         raise module
-    _stdout_pointer = len(sys.stdout.getvalue())
+    clear_stdout()
     importlib.reload(module)
 
 
@@ -92,6 +92,11 @@ def any_contains(needle, haystacks):
     any(map(lambda haystack: needle in haystack, haystacks))
 
 
+def clear_stdout():
+    global _stdout_pointer
+    _stdout_pointer = len(sys.stdout.getvalue())
+
+
 def check_source(module):
     """
     Check that module doesn't have any globals.
@@ -101,7 +106,7 @@ def check_source(module):
             self.assertTrue(result, "Make sure no code is outside functions.\\nRow: " + line)
     """
     try:
-        source = module.__file__
+        source = inspect.getsource(module)
     except Exception:
         raise Exception('Varmista, että koodin suoritus onnistuu')
     allowed = [
@@ -115,16 +120,16 @@ def check_source(module):
         "if __name__",
         "@",
     ]
-    with open(source) as file:
-        for line in file.readlines():
-            if line.strip() == "":
-                continue
-            for prefix in allowed:
-                if line.startswith(prefix):
-                    break
-            else:
-                return (False, line)
-        return (True, "")
+
+    for line in source.split("\n"):
+        if line.strip() == "":
+            continue
+        for prefix in allowed:
+            if line.startswith(prefix):
+                break
+        else:
+            return (False, line)
+    return (True, "")
 
 
 def remove_extra_whitespace(mj):

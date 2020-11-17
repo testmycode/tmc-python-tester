@@ -2,8 +2,10 @@ import importlib
 from bdb import Bdb
 import sys
 
+
 class RecursionDetected(Exception):
     pass
+
 
 class RecursionDetector(Bdb):
     def do_clear(self, arg):
@@ -22,6 +24,7 @@ class RecursionDetector(Bdb):
     def user_return(self, frame, return_value):
         self.stack.remove(frame.f_code)
 
+
 def test_recursion(func: callable, *args):
     detector = RecursionDetector()
     detector.set_trace()
@@ -34,8 +37,9 @@ def test_recursion(func: callable, *args):
     finally:
         sys.settrace(None)
 
+
 class Reflect:
-    def __init__(self, modulename:str = "", classname:str = ""):
+    def __init__(self, modulename: str = "", classname: str = ""):
         self.__classname = classname
         self.__modulename = modulename
         self.__cls = None
@@ -68,7 +72,7 @@ class Reflect:
     def object(self):
         return self.__obj
 
-    def list_attributes(self, filter_builtin = False):
+    def list_attributes(self, filter_builtin=False):
         if filter_builtin:
             return [x for x in dir(self.__obj) if not x.startswith("__")]
         return dir(self.__obj)
@@ -85,7 +89,7 @@ class Reflect:
             return getattr(self.__obj, attribute)
         elif ("_" + self.__classname + attribute) in dir(self.__obj):
             return getattr(self.__obj, "_" + self.__classname + attribute)
-        return None 
+        return None
 
     def list_public_members(self):
         return [x for x in dir(self.__obj) if not x.startswith("_")]
