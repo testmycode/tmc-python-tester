@@ -59,3 +59,4 @@ target/
 # TMC files
 .tmc_test_results.json
 .available_points.json
+.tmc_test_results.hmac.sha256

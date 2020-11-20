@@ -1,15 +1,30 @@
+from tmc.hmac_writer import write_hmac
 from unittest.runner import TextTestResult
 from .points import _parse_points, _name_test
 import atexit
 import json
 import traceback
 
-results = []
-
+module_secret = None
 
 class TMCResult(TextTestResult):
 
     def __init__(self, stream, descriptions, verbosity):
+        self.__results = []
+        global module_secret
+        secret = module_secret
+        del module_secret
+        that = self
+
+        def write_output():
+            nonlocal that
+            nonlocal secret
+            output = json.dumps(that.__results)
+            if secret is not None:
+                write_hmac(secret, output)
+            with open(".tmc_test_results.json", "w") as text_file:
+                text_file.write(output)
+        atexit.register(write_output)
         super(TMCResult, self).__init__(stream, descriptions, verbosity)
 
     def startTest(self, test):
@@ -43,10 +58,4 @@ class TMCResult(TextTestResult):
             'points': points,
             'backtrace': backtrace
         }
-        results.append(details)
-
-    # TODO: Do not do this if not using TMCTestRunner
-    @atexit.register
-    def write_output():
-        with open('.tmc_test_results.json', 'w', encoding='utf8') as f:
-            json.dump(results, f, ensure_ascii=False)
+        self.__results.append(details)
