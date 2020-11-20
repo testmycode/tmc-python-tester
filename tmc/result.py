@@ -1,11 +1,14 @@
 from tmc.hmac_writer import write_hmac
 from unittest.runner import TextTestResult
 from .points import _parse_points, _name_test
+from copy import deepcopy
 import atexit
 import json
 import traceback
 
 module_secret = None
+# Copy of the results for the Python editor
+results = []
 
 class TMCResult(TextTestResult):
 
@@ -43,6 +46,7 @@ class TMCResult(TextTestResult):
         self.addResult(test, 'errored', err)
 
     def addResult(self, test, status, err=None):
+        global results
         points = _parse_points(test)
         message = ""
         backtrace = []
@@ -59,3 +63,4 @@ class TMCResult(TextTestResult):
             'backtrace': backtrace
         }
         self.__results.append(details)
+        results = deepcopy(self.__results)
