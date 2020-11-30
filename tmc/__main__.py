@@ -1,6 +1,7 @@
 from unittest import TestProgram
 from .runner import TMCTestRunner
 import sys
+from tmc import result
 
 django_defined = False
 try:
@@ -27,6 +28,10 @@ if django_defined:
 if sys.argv.__len__() > 1 and sys.argv[1] == 'available_points':
     TMCTestRunner().available_points()
     sys.exit()
+
+if '--wait-for-secret' in sys.argv:
+    sys.argv.remove("--wait-for-secret")
+    result.module_secret = input("waiting for a secret ")
 
 if django_defined:
     settings.TEST_RUNNER = 'tmc.django.TMCDiscoverRunner'
