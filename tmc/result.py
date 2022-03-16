@@ -3,6 +3,7 @@ from unittest.runner import TextTestResult
 from .points import _parse_points, _name_test
 from copy import deepcopy
 import atexit
+import gc
 import json
 import traceback
 
@@ -31,7 +32,14 @@ class TMCResult(TextTestResult):
         super(TMCResult, self).__init__(stream, descriptions, verbosity)
 
     def startTest(self, test):
+        # It is easy to use a lot of memory in a unit test and if we don't force garbage collection here, we can go over the memory limit in the sandbox
+        gc.collect()
         super(TMCResult, self).startTest(test)
+
+    def stopTest(self, test):
+        super(TMCResult, self).stopTest(test)
+        # It is easy to use a lot of memory in a unit test and if we don't force garbage collection here, we can go over the memory limit in the sandbox
+        gc.collect()
 
     def addSuccess(self, test):
         super(TMCResult, self).addSuccess(test)
