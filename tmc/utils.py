@@ -96,8 +96,7 @@ def clear_stdout():
     global _stdout_pointer
     _stdout_pointer = len(sys.stdout.getvalue())
 
-
-def check_source(module):
+def check_source(module, lang='en'):
     """
     Check that module doesn't have any globals.
     Example::
@@ -108,7 +107,9 @@ def check_source(module):
     try:
         source = inspect.getsource(module)
     except Exception:
-        raise Exception('Varmista, että koodin suoritus onnistuu')
+        if lang == 'fi':
+            raise Exception('Varmista että koodin suoritus onnistuu')
+        raise Exception('Make sure the code execution succeeds')
     allowed = [
         "import ",
         "from ",
@@ -146,7 +147,7 @@ def sanitize(mj):
     return '\n'.join([remove_extra_whitespace(m) for m in mj.split('\n')])
 
 
-def assert_ignore_ws(self, was, expected, errmsg='', lang='fi'):
+def assert_ignore_ws(self, was, expected, errmsg='', lang='en'):
     """
     Assert Ignore all whitespace in output.
     Example::
