@@ -5,7 +5,7 @@ from tmc import result
 
 django_defined = False
 try:
-    with open('.tmcproject.yml') as f:
+    with open('.tmcproject.yml', encoding='utf8') as f:
         for line in f:
             try:
                 (key, value) = line.split(":")
