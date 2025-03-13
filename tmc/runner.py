@@ -32,5 +32,5 @@ class TMCTestRunner(TextTestRunner):
 
         result = dict(zip(names, points))
 
-        with open('.available_points.json', 'w') as f:
+        with open('.available_points.json', 'w', encoding='utf8') as f:
             json.dump(result, f, ensure_ascii=False)

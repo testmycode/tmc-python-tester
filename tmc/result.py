@@ -26,7 +26,7 @@ class TMCResult(TextTestResult):
             output = json.dumps(that.__results)
             if secret is not None:
                 write_hmac(secret, output)
-            with open(".tmc_test_results.json", "w") as text_file:
+            with open(".tmc_test_results.json", "w", encoding="utf-8") as text_file:
                 text_file.write(output)
         atexit.register(write_output)
         super(TMCResult, self).__init__(stream, descriptions, verbosity)
