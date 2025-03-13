@@ -77,6 +77,9 @@ class Reflect:
             return [x for x in dir(self.__obj) if not x.startswith("__")]
         return dir(self.__obj)
 
+    def list_writable_attributes(self):
+        return self.__obj.__dict__
+
     def has_attribute(self, attribute: str):
         if attribute in dir(self.__obj):
             return True
